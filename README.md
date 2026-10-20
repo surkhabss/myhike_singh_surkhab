@@ -44,7 +44,11 @@ Evidence is kept separately from the public code repository so profile informati
 
 - Production build passed for all five HTML entry points.
 - Real Firestore SDK reads confirmed both quote documents, one user profile, and the three expected hike records in the separate demo project.
-- The Firestore console capture is annotated. Browser dashboard/detail checks and the remaining two annotated captures are pending a signed-in preview session.
+- Signed-in dashboard greeting, live quote and three-card grid verified in the browser.
+- Editing Tuesday's quote in the Firebase console updated the dashboard without a reload.
+- All three Read More links opened the matching document ID, hike name and image; Back returned to the dashboard.
+- Missing IDs and nonexistent documents showed the expected messages.
+- All three required screen captures are annotated in the separate personal hand-in.
 
 ## Learning references
 
