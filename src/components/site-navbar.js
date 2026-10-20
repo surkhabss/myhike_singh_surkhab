@@ -14,8 +14,8 @@ class SiteNavbar extends HTMLElement {
             <nav class="navbar navbar-expand-lg navbar-light bg-warning">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="/">
-                        <img src="/images/hikelogo.png" height="36">
-                        Hoda Hikes
+                        <img src="/images/hikelogo.png" height="36" alt="">
+                        Surkhab Hikes
                     </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,7 +24,7 @@ class SiteNavbar extends HTMLElement {
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto">
                             <li class="nav-item">
-                                <a class="nav-link" href="/">Home</a>
+                                <a class="nav-link" href="/main.html">Hikes</a>
                             </li>
                         </ul>
                         <div class="d-flex align-items-center gap-2 ms-lg-2" id="rightControls">

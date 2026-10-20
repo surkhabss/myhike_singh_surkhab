@@ -1,0 +1,16 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /quotes/{day} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+    match /hikes/{hikeId} {
+      allow read, create: if request.auth != null;
+      allow update, delete: if false;
+    }
+    match /users/{userId} {
+      allow read, create, update: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}

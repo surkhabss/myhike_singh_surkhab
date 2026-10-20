@@ -1,151 +1,54 @@
+# Surkhab Hikes - Demo 07
 
-# Project Name
+Separate personal COMP1800 Firestore demo. This project does not change the DTC14 team app.
 
-## Overview
-Summarize your project's purpose, problem solved, key features, user benefits, development context, and main technologies used.
+Course instructions: [Demo 07](https://bcit-cst.notion.site/Demo-07-Firebase-Firestore-Database-202630-3196dfaf038a80b98f15ddcf52d6bb76).
+Starter: [COMP1800Hoda/myhike_readyForDemo07](https://github.com/COMP1800Hoda/myhike_readyForDemo07).
 
-Example:
+## Run
 
-This client-side JavaScript web application provides real-time weather updates for cities worldwide. It simplifies accessing weather information through an intuitive mobile-first interface, allowing users to input a city name and receive data on temperature, humidity, and conditions.
+1. Install dependencies with `npm ci`.
+2. Copy `.env_template` to `.env` and fill in the four Firebase web configuration values for your own project. Keep `.env` out of Git.
+3. Enable Email/Password Authentication and create a Standard Cloud Firestore database.
+4. In the Firebase console, create `quotes/monday` and `quotes/tuesday`, each with a string field named `quote`. Add the other days when needed.
+5. Run `npm run dev -- --port 5174`. Open the local link, sign up, and log in.
+6. Run `npm run build` to build all pages, including the dashboard and hike details.
 
-Developed for the [Course Name] course, applying User-Centred Design practices, agile project management processes, integrating a weather API, and Firebase backend services.
+## Firestore demo requirements
 
----
+- `src/firebaseConfig.js` exports Authentication and Firestore instances from the same Firebase app.
+- `src/main.js` listens to today's quote with `onSnapshot`. The weekday is computed automatically.
+- Signup writes `users/{uid}` with name, email, country and school. The dashboard reads that profile's name, with an Authentication fallback.
+- An empty `hikes` collection is seeded with three sample hikes using an awaited batch and stable IDs. An existing collection is left alone.
+- The dashboard clones an HTML template into a responsive card grid. Images are served from `public/images`.
+- Each Read More link includes a Firestore `docID`. `eachHike.html` reads that document and displays its name, image and description.
+- Missing or invalid IDs, missing documents, and read failures show messages. Signed-out visitors are sent to login.
 
-## Features
+## Database rules
 
-Example:
-- Real-time weather updates for any city.
-- Responsive design for desktop and mobile.
-- Displays temperature, humidity, and weather conditions.
+`firestore.rules` mirrors the teacher-requested public test mode approved for this course demo. Its access expires at **2026-11-19 UTC**. The course-end date was not supplied; adjust the expiry to the actual date only if required by the instructor.
 
----
+`firestore.restricted.rules` is an alternative for after the exercise: signed-in users can read quotes and hikes, create hikes, and access only their own profile. It is not deployed. Do not store sensitive information while public test mode is active.
 
-## Technologies Used
+## Hand-in evidence
 
-- **Frontend**: HTML, CSS, JavaScript
-- **Build Tool**: [Vite](https://vitejs.dev/)
-- **Backend**: Firebase for hosting
-- **Database**: Firestore
+The hand-in template requests three annotated screen captures:
 
----
+1. Firebase project name; `quotes`, `users`, `hikes`; and the signed-up user's profile name.
+2. `main.html` URL, app name, personal greeting, Firestore quote and three-card grid.
+3. `eachHike.html?docID=...` URL and the selected hike's name and image.
 
-## Usage
+Evidence is kept separately from the public code repository so profile information is not committed here.
 
-To run the application locally:
+## Verification
 
-1.  **Clone** the repository.
-2.  **Install dependencies** by running `npm install` in the project root directory.
-3.  **Start the development server** by running the command: `npm run dev`.
-4.  Open your browser and visit the local address shown in your terminal (usually `http://localhost:5173` or similar).
+- Production build passed for all five HTML entry points.
+- Real Firestore SDK reads confirmed both quote documents, one user profile, and the three expected hike records in the separate demo project.
+- Browser flow verification and annotated captures are completed in the personal hand-in once signed in.
 
-Once the application is running:
+## Learning references
 
-1.  Browse the list of hiking trails displayed on the main page.
-2.  Click the heart icon (or similar) to mark a trail as a favorite.
-3.  View your favorite hikes in the favorites section.
+- [Firestore real-time listeners](https://firebase.google.com/docs/firestore/query-data/listen)
+- [Firestore rule conditions](https://firebase.google.com/docs/firestore/security/rules-conditions)
 
-
----
-## Shared Navbar and Footer (Web Components)
-What this gives you:
-
-- A single source of truth for the navbar and footer
-- Same markup reused across all pages with `<site-navbar>` and `<site-footer>`
-- Easy customization by editing a single JavaScript file per component
-
-How to use it on any HTML page (e.g., `index.html`, `skeleton.html`):
-
-1) Import the components (in `<head>`):
-
-	```html
-	<script type="module" src="/src/components/site-navbar.js"></script>
-	<script type="module" src="/src/components/site-footer.js"></script>
-	```
-
-	Also load global scripts:
-
-	```html
-	<script type="module" src="/src/app.js"></script>
-	```
-
-	Notes:
-	- Bootstrap CSS and JS are imported in `src/app.js` via ES modules, so you don’t need extra `<link>` or `<script>` tags in HTML.
-	- Vite handles module loading during development with `npm run dev`.
-
-2) Drop the custom elements where you want them to render:
-
-	```html
-	<!-- our own navbar goes here -->
-	<site-navbar></site-navbar>
-
-	<!-- Main content goes here -->
-
-	<!-- our own footer goes here -->
-	<site-footer></site-footer>
-	```
-
-3) Customize the shared markup once:
-
-	- Edit `src/components/site-navbar.js` to change the navbar (brand, links, etc.)
-	- Edit `src/components/site-footer.js` to change the footer
-
-	Every page using `<site-navbar>` and `<site-footer>` will automatically reflect your changes.
-
-## Project Structure
-
-Example:
-```
-my-project/
-├─ public/
-│  └─ images/
-├─ src/
-│  ├─ components/
-│  │  ├─ site-footer.js   ← shared footer Web Component
-│  │  └─ site-navbar.js   ← shared navbar Web Component
-│  ├─ styles/
-│  │  └─ style.css
-│  ├─ app.js              ← imports Bootstrap + global styles
-│  ├─ authentication.js
-│  ├─ firebaseConfig.js
-│  └─ loginSignup.js      ← login/signup UI logic
-├─ login.html
-├─ index.html
-└─ skeleton.html
-
-```
-
----
-
-## Contributors
-- **Your Name** - BCIT CST Student with a passion for creating user-friendly applications. Fun fact: Loves solving Rubik's Cubes in under a minute.
-- **Teammate Name** - BCIT CST Student, Frontend enthusiast with a knack for creative design. Fun fact: Has a collection of over 50 houseplants.
-
----
-
-## Acknowledgments
-
-Example:
-- Weather data sourced from [OpenWeatherMap](https://openweathermap.org/).
-- Code snippets for ___ algoirthm were adapted from resources such as [Stack Overflow](https://stackoverflow.com/) and [MDN Web Docs](https://developer.mozilla.org/).
-- Icons sourced from [FontAwesome](https://fontawesome.com/) and images from [Unsplash](https://unsplash.com/).
-
----
-
-## Limitations and Future Work
-### Limitations
-
-Example:
-- Currently, the app only supports city-based weather searches.
-- Limited to basic weather parameters like temperature, humidity, and conditions.
-- The user interface can be further enhanced for accessibility.
-
-### Future Work
-
-Example: 
-- Add support for location-based weather detection using GPS.
-- Implement additional weather parameters like wind speed and UV index.
-- Create a dark mode for better usability in low-light conditions.
-- Integrate user accounts for saving favorite locations.
-
----
+Starter code is provided by the BCIT COMP1800 course. Demo implementation was prepared with Codex assistance; review the code and practise the flow before demonstrating it.
