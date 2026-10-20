@@ -44,7 +44,7 @@ Evidence is kept separately from the public code repository so profile informati
 
 - Production build passed for all five HTML entry points.
 - Real Firestore SDK reads confirmed both quote documents, one user profile, and the three expected hike records in the separate demo project.
-- Browser flow verification and annotated captures are completed in the personal hand-in once signed in.
+- The Firestore console capture is annotated. Browser dashboard/detail checks and the remaining two annotated captures are pending a signed-in preview session.
 
 ## Learning references
 
