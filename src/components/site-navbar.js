@@ -1,5 +1,4 @@
-// Import Firebase authentication tools
-import { logoutUser , onAuthReady} from '/src/authentication.js';   // Our function to log out the user
+import { logoutUser , onAuthReady} from '/src/authentication.js';
 
 class SiteNavbar extends HTMLElement {
     constructor() {
@@ -10,7 +9,6 @@ class SiteNavbar extends HTMLElement {
 
     renderNavbar() {
         this.innerHTML = `
-            <!-- Navbar: single source of truth -->
             <nav class="navbar navbar-expand-lg navbar-light bg-warning">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="/">
@@ -33,7 +31,6 @@ class SiteNavbar extends HTMLElement {
                                 <button class="btn btn-outline-light d-none d-sm-inline-block" type="submit">Search</button>
                             </form>
                             <div id="authControls" class="auth-controls d-flex align-items-center gap-2 my-2 my-lg-0">
-                                <!-- populated by JS -->
                             </div>
                         </div>
 
@@ -42,27 +39,21 @@ class SiteNavbar extends HTMLElement {
             </nav>
         `;
     }
-    /**
- * Displays Log in or Log out button in the navbar based on Firebase authentication status.
- * Updates automatically when the user's login status changes.
- * Uses callbacks to detect auth changes and handle the Log out button click.
- */
 renderAuthControls() {
-    const authControls = this.querySelector('#authControls'); // Find #authControls inside this navbar
+    const authControls = this.querySelector('#authControls');
 
     // Invisible placeholder prevents layout shifting while Firebase checks login status
     authControls.innerHTML = `<div class="btn btn-outline-light" style="visibility: hidden; min-width: 80px;">Log out</div>`;
 
-    // Pass a callback that runs when Firebase reports the login status
-    onAuthReady(function(user) { // Receives the user object (or null)
+    onAuthReady(function(user) {
 
-        if (user) { // User is logged in
+        if (user) {
             authControls.innerHTML = `<button class="btn btn-outline-light" id="signOutBtn" type="button" style="min-width: 80px;">Log out</button>`;
 
             const signOutBtn = authControls.querySelector('#signOutBtn');
-            signOutBtn.addEventListener('click', logoutUser); // Callback: runs when Log out is clicked
+            signOutBtn.addEventListener('click', logoutUser);
 
-        } else { // User is NOT logged in, and gets redirected to login page if user clicks the login button
+        } else {
             authControls.innerHTML = `<a class="btn btn-outline-light" id="loginBtn" href="/login.html" style="min-width: 80px;">Log in</a>`;
         }
     });

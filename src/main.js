@@ -7,7 +7,6 @@ let stopQuote;
 let activeUserId;
 const status = document.getElementById('hikes-status');
 
-// Runs immediately and again whenever today's quote changes in Firestore.
 function readQuote(day) {
   return onSnapshot(doc(db, 'quotes', day), snapshot => {
     const quote = snapshot.exists() ? snapshot.data().quote : null;
