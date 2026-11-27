@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Add a hike | Surkhab Hikes</title>
+  <script type="module" src="/src/components/site-navbar.js"></script>
+  <script type="module" src="/src/components/site-footer.js"></script>
+</head>
+<body>
+  <site-navbar></site-navbar>
+  <main class="container py-4" style="max-width: 560px;">
+    <h1>Add a new hike</h1>
+    <form id="addHikeForm">
+      <div class="mb-3"><label for="hikeNameInput" class="form-label">Hike name</label><input id="hikeNameInput" class="form-control" required></div>
+      <div class="mb-3"><label for="cityInput" class="form-label">City</label><input id="cityInput" class="form-control" required></div>
+      <div class="mb-3"><label for="levelInput" class="form-label">Level</label><select id="levelInput" class="form-select"><option>easy</option><option>moderate</option><option>hard</option></select></div>
+      <div class="mb-3"><label for="lengthInput" class="form-label">Length (km)</label><input type="number" id="lengthInput" class="form-control" step="0.1" min="0" required></div>
+      <div class="mb-3"><label for="detailsInput" class="form-label">Details</label><textarea id="detailsInput" class="form-control" rows="3"></textarea></div>
+      <p id="save-status" role="status"></p>
+      <button id="saveHikeButton" type="submit" class="btn btn-primary w-100" disabled>Save hike</button>
+    </form>
+  </main>
+  <site-footer></site-footer>
+  <script type="module" src="/src/app.js"></script>
+  <script type="module" src="/src/addHike.js"></script>
+</body>
+</html>

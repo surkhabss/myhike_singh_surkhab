@@ -1,10 +1,12 @@
 import { onAuthReady } from './authentication.js';
 import { db } from './firebaseConfig.js';
-import { collection, doc, getDoc, getDocs, onSnapshot, writeBatch, serverTimestamp } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, onSnapshot, writeBatch, serverTimestamp, setDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { sampleHikes } from './sampleHikes.js';
 
 let stopQuote;
 let activeUserId;
+let currentUser = null;
+let favourites = [];
 const status = document.getElementById('hikes-status');
 
 function readQuote(day) {
@@ -52,17 +54,51 @@ async function displayCardsDynamically() {
     card.querySelector('.card-text').textContent = hike.details || `Located in ${hike.city}.`;
     card.querySelector('.card-length').textContent = hike.length;
     const image = card.querySelector('.card-image');
-    image.src = `/images/${encodeURIComponent(hike.code)}.jpg`;
+    if (hike.code) image.src = `/images/${encodeURIComponent(hike.code)}.jpg`;
+    else image.hidden = true;
     image.alt = hike.name;
     card.querySelector('.read-more').href = `eachHike.html?docID=${encodeURIComponent(hikeDoc.id)}`;
+    setupHeart(card, hikeDoc.id);
     container.appendChild(card);
   });
   status.textContent = snapshot.empty ? 'No hikes have been added yet.' : '';
 }
 
+function setupHeart(card, hikeID) {
+  const button = card.querySelector('.fav-btn');
+  const heart = button.querySelector('i');
+  const saved = favourites.includes(hikeID);
+  heart.classList.toggle('bi-heart', !saved);
+  heart.classList.toggle('bi-heart-fill', saved);
+  button.setAttribute('aria-pressed', String(saved));
+  button.setAttribute('aria-label', `Favourite ${card.querySelector('.card-title').textContent}`);
+  button.addEventListener('click', () => toggleFavourite(button, heart, hikeID));
+}
+
+async function toggleFavourite(button, heart, hikeID) {
+  if (!currentUser || button.disabled) return;
+  button.disabled = true;
+  const saved = heart.classList.contains('bi-heart-fill');
+  try {
+    await setDoc(doc(db, 'users', currentUser.uid), {
+      favourites: saved ? arrayRemove(hikeID) : arrayUnion(hikeID),
+    }, { merge: true });
+    favourites = saved ? favourites.filter(id => id !== hikeID) : [...favourites, hikeID];
+    heart.classList.toggle('bi-heart-fill', !saved);
+    heart.classList.toggle('bi-heart', saved);
+    button.setAttribute('aria-pressed', String(!saved));
+    status.textContent = '';
+  } catch (error) {
+    status.textContent = `Could not save favourite: ${error.code || error.message}`;
+  } finally {
+    button.disabled = false;
+  }
+}
+
 onAuthReady(async user => {
   stopQuote?.();
   activeUserId = user?.uid;
+  currentUser = user;
   if (!user) {
     location.replace('login.html');
     return;
@@ -71,6 +107,8 @@ onAuthReady(async user => {
   stopQuote = readQuote(day);
   await showName(user);
   try {
+    const profile = await getDoc(doc(db, 'users', user.uid));
+    favourites = profile.data()?.favourites || [];
     await seedHikes();
     if (activeUserId !== user.uid) return;
     await displayCardsDynamically();

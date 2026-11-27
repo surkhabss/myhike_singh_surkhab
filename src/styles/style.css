@@ -1,5 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
 
-body { min-width: 320px; }
-.card-image { height: 220px; object-fit: cover; }
-#hikeImage { width: 100%; max-height: 65vh; object-fit: cover; }
-:focus-visible { outline: 3px solid #664d03; outline-offset: 3px; }
+:root {
+  --background: #eef2fa;
+  --primary: #b0c3fa;
+  --secondary: #d9e3fa;
+  --accent: #c5d2fa;
+  --ink: #202b48;
+  --control-border: #63749c;
+  --focus: #40578e;
+  --bs-font-sans-serif: 'DM Sans', system-ui, sans-serif;
+  --bs-body-bg: var(--background);
+  --bs-body-bg-rgb: 238, 242, 250;
+  --bs-body-color: var(--ink);
+  --bs-body-color-rgb: 32, 43, 72;
+  --bs-primary: var(--primary);
+  --bs-primary-rgb: 176, 195, 250;
+  --bs-secondary: var(--secondary);
+  --bs-secondary-rgb: 217, 227, 250;
+  --bs-link-color-rgb: 43, 67, 124;
+  --bs-link-hover-color-rgb: 32, 43, 72;
+}
+
+body {
+  min-width: 320px;
+}
+
+.navbar {
+  --bs-primary-rgb: 176, 195, 250;
+  --bs-navbar-color: var(--ink);
+  --bs-navbar-hover-color: var(--ink);
+  --bs-navbar-brand-color: var(--ink);
+  --bs-navbar-brand-hover-color: var(--ink);
+}
+
+.btn-primary {
+  --button-bg: var(--primary);
+  --button-hover: var(--accent);
+}
+
+.btn-secondary {
+  --button-bg: var(--secondary);
+  --button-hover: var(--accent);
+}
+
+.btn-primary,
+.btn-secondary {
+  --bs-btn-color: var(--ink);
+  --bs-btn-bg: var(--button-bg);
+  --bs-btn-border-color: var(--control-border);
+  --bs-btn-hover-color: var(--ink);
+  --bs-btn-hover-bg: var(--button-hover);
+  --bs-btn-hover-border-color: var(--focus);
+  --bs-btn-active-color: var(--ink);
+  --bs-btn-active-bg: var(--button-hover);
+  --bs-btn-active-border-color: var(--focus);
+  --bs-btn-disabled-color: var(--ink);
+  --bs-btn-disabled-bg: var(--button-bg);
+  --bs-btn-disabled-border-color: var(--control-border);
+  --bs-btn-focus-shadow-rgb: 64, 87, 142;
+}
+
+.bg-accent {
+  background-color: var(--accent);
+  color: var(--ink);
+}
+
+.card-image {
+  height: 220px;
+  object-fit: cover;
+}
+
+#hikeImage {
+  width: 100%;
+  max-height: 65vh;
+  object-fit: cover;
+}
+
+:focus-visible,
+.btn:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}

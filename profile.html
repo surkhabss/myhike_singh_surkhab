@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>My profile | Surkhab Hikes</title>
+    <script type="module" src="/src/components/site-navbar.js"></script>
+    <script type="module" src="/src/components/site-footer.js"></script>
+  </head>
+  <body>
+    <site-navbar></site-navbar>
+    <main class="container py-4">
+      <header class="d-flex align-items-center gap-3 mb-4">
+        <span
+          id="profileInitial"
+          class="rounded-circle bg-warning d-inline-flex align-items-center justify-content-center fs-2"
+          style="width: 64px; height: 64px"
+          aria-hidden="true"
+          >?</span
+        >
+        <div>
+          <h1 id="profileName" class="h2 mb-1">My profile</h1>
+          <p id="profileEmail" class="mb-0 text-secondary"></p>
+        </div>
+      </header>
+      <section aria-labelledby="aboutHeading" class="mb-5">
+        <h2 id="aboutHeading">About me</h2>
+        <form id="profileForm" class="border rounded p-3">
+          <label class="form-label" for="nameInput">Name</label>
+          <input
+            id="nameInput"
+            class="form-control mb-3"
+            maxlength="100"
+            required
+            disabled
+          />
+          <label class="form-label" for="countryInput">Country</label>
+          <input
+            id="countryInput"
+            class="form-control mb-3"
+            maxlength="100"
+            disabled
+          />
+          <label class="form-label" for="schoolInput">School</label>
+          <input
+            id="schoolInput"
+            class="form-control mb-3"
+            maxlength="150"
+            disabled
+          />
+          <label class="form-label" for="bioInput">Bio</label>
+          <textarea
+            id="bioInput"
+            class="form-control mb-3"
+            rows="2"
+            maxlength="500"
+            disabled
+          ></textarea>
+          <div class="d-flex gap-2">
+            <button
+              id="editBtn"
+              type="button"
+              class="btn btn-secondary"
+              disabled
+            >
+              Edit
+            </button>
+            <button id="saveBtn" type="submit" class="btn btn-primary" disabled>
+              Save
+            </button>
+          </div>
+          <p id="profile-status" class="mt-3 mb-0" role="status">
+            Loading profile…
+          </p>
+        </form>
+      </section>
+      <section aria-labelledby="favouritesHeading">
+        <h2 id="favouritesHeading">My favourite hikes</h2>
+        <p id="hikes-status" role="status">Loading favourites…</p>
+        <div id="hikes-go-here" class="row row-cols-1 row-cols-md-3 g-4"></div>
+      </section>
+    </main>
+    <template id="hikeCardTemplate">
+      <div class="col">
+        <article class="card h-100">
+          <img class="card-img-top card-image" alt="" />
+          <button
+            type="button"
+            class="fav-btn btn btn-light position-absolute top-0 end-0 m-2"
+            title="Favourite"
+            aria-label="Favourite hike"
+            aria-pressed="false"
+          >
+            <i class="bi bi-heart text-danger fs-4" aria-hidden="true"></i>
+          </button>
+          <div class="card-body d-flex flex-column">
+            <h3 class="card-title h5"></h3>
+            <p class="card-text"></p>
+            <p>Length: <span class="card-length"></span> km</p>
+            <a class="btn btn-secondary read-more mt-auto">Read More</a>
+          </div>
+        </article>
+      </div>
+    </template>
+    <site-footer></site-footer>
+    <script type="module" src="/src/app.js"></script>
+    <script type="module" src="/src/profile.js"></script>
+  </body>
+</html>
