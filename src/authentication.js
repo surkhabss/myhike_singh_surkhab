@@ -35,20 +35,6 @@ export async function logoutUser() {
   window.location.href = "index.html";
 }
 
-export function checkAuthState() {
-  onAuthStateChanged(auth, (user) => {
-    if (window.location.pathname.endsWith("main.html")) {
-      if (user) {
-        const displayName = user.displayName || user.email;
-        const welcome = document.getElementById('welcomeMessage');
-        if (welcome) welcome.textContent = `Hello, ${displayName}!`;
-      } else {
-        window.location.href = "index.html";
-      }
-    }
-  });
-}
-
 export function onAuthReady(callback) {
   return onAuthStateChanged(auth, callback);
 }
@@ -70,4 +56,3 @@ export function authErrorMessage(error) {
 
   return map[code] || "Something went wrong. Please try again.";
 }
-

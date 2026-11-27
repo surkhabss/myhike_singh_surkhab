@@ -30,17 +30,6 @@
         <p id="hikes-status" role="status">Loading hikes…</p>
         <div id="hikes-go-here" class="row row-cols-1 row-cols-md-3 g-4"></div>
     </main>
-    <template id="hikeCardTemplate">
-        <div class="col"><article class="card h-100">
-            <img class="card-img-top card-image" alt="">
-            <button type="button" class="fav-btn btn btn-light position-absolute top-0 end-0 m-2" title="Favourite" aria-label="Favourite hike" aria-pressed="false"><i class="bi bi-heart text-danger fs-4" aria-hidden="true"></i></button>
-            <div class="card-body d-flex flex-column">
-                <h3 class="card-title h5"></h3><p class="card-text"></p>
-                <p>Length: <span class="card-length"></span> km</p>
-                <a class="btn btn-secondary read-more mt-auto">Read More</a>
-            </div>
-        </article></div>
-    </template>
     <site-footer></site-footer>
 
     <script type="module" src="/src/app.js"></script>

@@ -11,7 +11,6 @@ export default defineConfig({
           "eachHike",
           "addHike",
           "profile",
-          "skeleton",
         ].map((name) => [name, resolve(process.cwd(), `${name}.html`)]),
       ),
     },

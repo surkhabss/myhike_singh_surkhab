@@ -1,4 +1,5 @@
 import { db } from "./firebaseConfig.js";
+import { createHikeCard } from "./components/hike-card.js";
 import { onAuthReady } from "./authentication.js";
 import {
   doc,
@@ -9,13 +10,9 @@ import {
   where,
   documentId,
   getDocs,
-  setDoc,
-  arrayUnion,
-  arrayRemove,
 } from "firebase/firestore";
 
 let currentUser = null;
-let favourites = [];
 const fields = ["name", "country", "school", "bio"];
 const profileStatus = document.getElementById("profile-status");
 const status = document.getElementById("hikes-status");
@@ -75,78 +72,30 @@ async function saveProfile(event) {
   }
 }
 
-async function displayFavourites() {
+async function displayFavourites(favourites, userId) {
   const container = document.getElementById("hikes-go-here");
-  container.replaceChildren();
   if (favourites.length === 0) {
     status.textContent = "No favourites yet. Tap a heart on the Hikes page.";
     return;
   }
-  const q = query(
-    collection(db, "hikes"),
-    where(documentId(), "in", favourites),
-  );
-  const snapshot = await getDocs(q);
-  snapshot.forEach((hikeDoc) => {
-    const hike = hikeDoc.data();
-    const card = document
-      .getElementById("hikeCardTemplate")
-      .content.cloneNode(true);
-    card.querySelector(".card-title").textContent = hike.name;
-    card.querySelector(".card-text").textContent =
-      hike.details || `Located in ${hike.city}.`;
-    card.querySelector(".card-length").textContent = hike.length;
-    const image = card.querySelector(".card-image");
-    if (hike.code) image.src = `/images/${encodeURIComponent(hike.code)}.jpg`;
-    else image.hidden = true;
-    image.alt = hike.name;
-    card.querySelector(".read-more").href =
-      `eachHike.html?docID=${encodeURIComponent(hikeDoc.id)}`;
-    setupHeart(card, hikeDoc.id);
-    container.appendChild(card);
-  });
-  status.textContent = snapshot.empty
-    ? "Your favourite hikes could not be found."
-    : "";
-}
 
-function setupHeart(card, hikeID) {
-  const button = card.querySelector(".fav-btn");
-  const heart = button.querySelector("i");
-  const saved = favourites.includes(hikeID);
-  heart.classList.toggle("bi-heart", !saved);
-  heart.classList.toggle("bi-heart-fill", saved);
-  button.setAttribute("aria-pressed", String(saved));
-  button.setAttribute(
-    "aria-label",
-    `Favourite ${card.querySelector(".card-title").textContent}`,
-  );
-  button.addEventListener("click", () =>
-    toggleFavourite(button, heart, hikeID),
-  );
-}
-
-async function toggleFavourite(button, heart, hikeID) {
-  if (!currentUser || button.disabled) return;
-  button.disabled = true;
-  const saved = heart.classList.contains("bi-heart-fill");
-  try {
-    await setDoc(
-      doc(db, "users", currentUser.uid),
-      {
-        favourites: saved ? arrayRemove(hikeID) : arrayUnion(hikeID),
-      },
-      { merge: true },
-    );
-    favourites = saved
-      ? favourites.filter((id) => id !== hikeID)
-      : [...favourites, hikeID];
-    await displayFavourites();
-  } catch (error) {
-    status.textContent = `Could not update favourites: ${error.code || error.message}`;
-  } finally {
-    button.disabled = false;
+  function removeCard(card) {
+    card.remove();
+    if (container.childElementCount === 0) {
+      status.textContent = "No favourites yet. Tap a heart on the Hikes page.";
+    }
   }
+
+  const cards = document.createDocumentFragment();
+  // Firestore accepts at most 30 IDs in each "in" query.
+  for (let start = 0; start < favourites.length; start += 30) {
+    const ids = favourites.slice(start, start + 30);
+    const snapshot = await getDocs(query(collection(db, "hikes"), where(documentId(), "in", ids)));
+    if (currentUser?.uid !== userId) return;
+    snapshot.forEach(hike => cards.append(createHikeCard(hike, userId, true, removeCard)));
+  }
+  container.replaceChildren(cards);
+  status.textContent = container.childElementCount ? "" : "Your favourite hikes could not be found.";
 }
 
 document.getElementById("profileForm").addEventListener("submit", saveProfile);
@@ -154,12 +103,15 @@ editBtn.addEventListener("click", enableEdit);
 
 onAuthReady(async (user) => {
   currentUser = user;
+  document.getElementById("hikes-go-here").replaceChildren();
   if (!user) {
     location.replace("login.html");
     return;
   }
+  let favourites;
   try {
     const userDoc = await getDoc(doc(db, "users", user.uid));
+    if (currentUser?.uid !== user.uid) return;
     if (!userDoc.exists()) {
       profileStatus.textContent =
         "This account has no Firestore profile. Please use an account created through Sign up.";
@@ -182,7 +134,7 @@ onAuthReady(async (user) => {
     return;
   }
   try {
-    await displayFavourites();
+    await displayFavourites(favourites, user.uid);
   } catch (error) {
     console.error("Favourites:", error);
     status.textContent =
